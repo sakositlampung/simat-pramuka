@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SISKA KWARDA LAMPUNG - Sistem Informasi Keanggotaan</title>
+    <!-- CSS Bootstrap 4 & FontAwesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f4f6f9; }
+        .bg-pramuka { background-color: #4a2c11 !important; }
+        .top-header { background: linear-gradient(135deg, #4a2c11, #795548); color: white; padding: 15px 0; }
+        .nav-link { color: rgba(255,255,255,.8) !important; font-weight: 500; }
+        .nav-link:hover, .nav-item.active .nav-link { color: #ffd700 !important; }
+        .small-box { border-radius: 8px; color: #fff; padding: 20px; position: relative; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .small-box .inner h3 { font-size: 2.2rem; font-weight: 700; margin-bottom: 5px; }
+        .small-box .icon { position: absolute; top: 15px; right: 15px; font-size: 45px; opacity: 0.3; }
+        .box-golongan { background: #fff; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 15px; }
+        .text-pandega { color: #8e44ad; }
+        .txt-garuda { font-size: 1.5rem; font-weight: bold; margin-top: 5px; }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="top-header">
+            <div class="container d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <i class="fa fa-tree fa-2x mr-3 text-warning"></i>
+                    <div>
+                        <h4 class="mb-0 font-weight-bold">SISKA KWARDA LAMPUNG</h4>
+                        <small>Sistem Informasi Keanggotaan Gerakan Pramuka Lampung</small>
+                    </div>
+                </div>
+                <div>
+                    <a href="admin.html" class="btn btn-outline-light btn-sm"><i class="fa fa-lock mr-1"></i> Panel Admin</a>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-pramuka shadow-sm">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active"><a class="nav-link" href="index.html">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#grafik-kwarcab">Data Kwarcab</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#golongan">Golongan & Garuda</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#agenda">Agenda Kegiatan</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Content -->
+    <div class="content py-4">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-white shadow-sm">
+                    <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Beranda</a></li>
+                    <li class="breadcrumb-item active">Dashboard Ringkasan</li>
+                    <li class="ml-auto text-muted"><i class="fa fa-calendar mr-1"></i><span id="current-date"></span></li>
+                </ol>
+            </nav>
+
+            <!-- Stat Boxes -->
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3 id="stat-kwarcab">15</h3>
+                            <p>Kwartir Cabang</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-map-marker"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="small-box bg-primary">
+                        <div class="inner">
+                            <h3 id="stat-kwarran">228</h3>
+                            <p>Kwartir Ranting</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-sitemap"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="small-box bg-warning text-white">
+                        <div class="inner">
+                            <h3 id="stat-gudep">3.450</h3>
+                            <p>Gugusdepan</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-university"></i></div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3 id="stat-anggota">312.500</h3>
+                            <p>Total Anggota</p>
+                        </div>
+                        <div class="icon"><i class="fa fa-users"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="row" id="grafik-kwarcab">
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white font-weight-bold">
+                            <i class="fa fa-bar-chart text-success mr-2"></i>Anggota Muda per Kwarcab
+                        </div>
+                        <div class="card-body">
+                            <canvas id="chartAnggotaMuda" height="180"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white font-weight-bold">
+                            <i class="fa fa-bar-chart text-primary mr-2"></i>Anggota Dewasa per Kwarcab
+                        </div>
+                        <div class="card-body">
+                            <canvas id="chartAnggotaDewasa" height="180"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Golongan & Rincian -->
+            <div class="row" id="golongan">
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="box-golongan border-top border-success" style="border-top-width: 4px !important;">
+                        <h5 class="text-success text-center font-weight-bold">Siaga</h5>
+                        <div class="row text-center my-2">
+                            <div class="col-6"><small class="text-muted">Putra</small><h6 id="siaga-pa" class="font-weight-bold">0</h6></div>
+                            <div class="col-6"><small class="text-muted">Putri</small><h6 id="siaga-pi" class="font-weight-bold">0</h6></div>
+                        </div>
+                        <table class="w-100 table-sm border-top small">
+                            <tr><td>Mula</td><td class="text-right font-weight-bold" id="siaga-mula">0</td></tr>
+                            <tr><td>Bantu</td><td class="text-right font-weight-bold" id="siaga-bantu">0</td></tr>
+                            <tr><td>Tata</td><td class="text-right font-weight-bold" id="siaga-tata">0</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="box-golongan border-top border-danger" style="border-top-width: 4px !important;">
+                        <h5 class="text-danger text-center font-weight-bold">Penggalang</h5>
+                        <div class="row text-center my-2">
+                            <div class="col-6"><small class="text-muted">Putra</small><h6 id="penggalang-pa" class="font-weight-bold">0</h6></div>
+                            <div class="col-6"><small class="text-muted">Putri</small><h6 id="penggalang-pi" class="font-weight-bold">0</h6></div>
+                        </div>
+                        <table class="w-100 table-sm border-top small">
+                            <tr><td>Ramu</td><td class="text-right font-weight-bold" id="penggalang-ramu">0</td></tr>
+                            <tr><td>Rakit</td><td class="text-right font-weight-bold" id="penggalang-rakit">0</td></tr>
+                            <tr><td>Terap</td><td class="text-right font-weight-bold" id="penggalang-terap">0</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="box-golongan border-top border-warning" style="border-top-width: 4px !important;">
+                        <h5 class="text-warning text-center font-weight-bold">Penegak</h5>
+                        <div class="row text-center my-2">
+                            <div class="col-6"><small class="text-muted">Putra</small><h6 id="penegak-pa" class="font-weight-bold">0</h6></div>
+                            <div class="col-6"><small class="text-muted">Putri</small><h6 id="penegak-pi" class="font-weight-bold">0</h6></div>
+                        </div>
+                        <table class="w-100 table-sm border-top small">
+                            <tr><td>Bantara</td><td class="text-right font-weight-bold" id="penegak-bantara">0</td></tr>
+                            <tr><td>Laksana</td><td class="text-right font-weight-bold" id="penegak-laksana">0</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <div class="box-golongan border-top" style="border-top: 4px solid #8e44ad !important;">
+                        <h5 class="text-pandega text-center font-weight-bold">Pandega</h5>
+                        <div class="row text-center my-2">
+                            <div class="col-6"><small class="text-muted">Putra</small><h6 id="pandega-pa" class="font-weight-bold">0</h6></div>
+                            <div class="col-6"><small class="text-muted">Putri</small><h6 id="pandega-pi" class="font-weight-bold">0</h6></div>
+                        </div>
+                        <table class="w-100 table-sm border-top small">
+                            <tr><td>Pandega</td><td class="text-right font-weight-bold" id="pandega-pandega">0</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pramuka Garuda Card -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-white font-weight-bold">
+                    <i class="fa fa-trophy text-warning mr-2"></i>Pencapaian Pramuka Garuda Lampung
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 col-6 mb-2">
+                            <span class="badge badge-success p-2 w-100">Garuda Siaga</span>
+                            <div class="txt-garuda text-success" id="garuda-siaga">0</div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-2">
+                            <span class="badge badge-danger p-2 w-100">Garuda Penggalang</span>
+                            <div class="txt-garuda text-danger" id="garuda-penggalang">0</div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-2">
+                            <span class="badge badge-warning text-white p-2 w-100">Garuda Penegak</span>
+                            <div class="txt-garuda text-warning" id="garuda-penegak">0</div>
+                        </div>
+                        <div class="col-md-3 col-6 mb-2">
+                            <span class="badge badge-primary p-2 w-100">Garuda Pandega</span>
+                            <div class="txt-garuda text-primary" id="garuda-pandega">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agenda Kegiatan Table -->
+            <div class="card shadow-sm mb-4" id="agenda">
+                <div class="card-header bg-white font-weight-bold">
+                    <i class="fa fa-calendar-check-o text-info mr-2"></i>Agenda Kegiatan Kwarda Lampung
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped" id="tbl-agenda" style="width:100%">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th width="5%">No</th>
+                                    <th>Nama Kegiatan</th>
+                                    <th>Waktu</th>
+                                    <th>Penyelenggara</th>
+                                    <th>Lokasi / Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-3 text-center bg-pramuka text-white mt-5">
+        <div class="container">
+            <p class="mb-0">© 2026 Kwarda Gerakan Pramuka Lampung. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        // Data awal default (dikustomisasi khusus Kwarda Lampung)
+        const defaultData = {
+            stats: { kwarcab: 15, kwarran: 228, gudep: 3450, anggota: 312500 },
+            kwarcabList: [
+                { nama: "Bandar Lampung", muda: 24500, dewasa: 1200 },
+                { nama: "Metro", muda: 18200, dewasa: 950 },
+                { nama: "Lampung Selatan", muda: 22100, dewasa: 1100 },
+                { nama: "Lampung Tengah", muda: 28400, dewasa: 1350 },
+                { nama: "Lampung Utara", muda: 19500, dewasa: 980 },
+                { nama: "Lampung Barat", muda: 14200, dewasa: 750 },
+                { nama: "Lampung Timur", muda: 26800, dewasa: 1280 },
+                { nama: "Tanggamus", muda: 17900, dewasa: 890 },
+                { nama: "Way Kanan", muda: 16500, dewasa: 820 },
+                { nama: "Pesawaran", muda: 18100, dewasa: 910 },
+                { nama: "Pringsewu", muda: 17300, dewasa: 880 },
+                { nama: "Mesuji", muda: 12400, dewasa: 640 },
+                { nama: "Tulang Bawang", muda: 15800, dewasa: 790 },
+                { nama: "Tulang Bawang Barat", muda: 13900, dewasa: 690 },
+                { nama: "Pesisir Barat", muda: 11200, dewasa: 580 }
+            ],
+            golongan: {
+                siaga: { pa: 45000, pi: 48000, mula: 35000, bantu: 26000, tata: 20000 },
+                penggalang: { pa: 52000, pi: 55000, ramu: 40000, rakit: 32000, terap: 20000 },
+                penegak: { pa: 38000, pi: 41000, bantara: 44000, laksana: 25000 },
+                pandega: { pa: 12000, pi: 14000, pandega: 22000 },
+                garuda: { siaga: 450, penggalang: 680, penegak: 520, pandega: 190 }
+            },
+            agenda: [
+                { id: 1, title: "Rapat Kerja Daerah (Rakerda) Kwarda Lampung", date: "15 November 2026", instansi: "Kwarda Lampung", detail: "Gedung Pramuka Rajabasa" },
+                { id: 2, title: "Kursus Pembina Pramuka Mahir Dasar (KMD)", date: "20-25 November 2026", instansi: "Kwarcab Bandar Lampung", detail: "Pusdiklatcab" },
+                { id: 3, title: "Perkemahan Wirakarya Daerah Lampung", date: "10-15 Desember 2026", instansi: "DKD Lampung", detail: "Kota Metro" }
+            ]
+        };
+
+        function getData() {
+            const saved = localStorage.getItem('SISKA_LAMPUNG_DATA');
+            return saved ? JSON.parse(saved) : defaultData;
+        }
+
+        $(document).ready(function() {
+            const data = getData();
+            $('#current-date').text(new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
+
+            // Stats Top
+            $('#stat-kwarcab').text(data.stats.kwarcab.toLocaleString('id-ID'));
+            $('#stat-kwarran').text(data.stats.kwarran.toLocaleString('id-ID'));
+            $('#stat-gudep').text(data.stats.gudep.toLocaleString('id-ID'));
+            $('#stat-anggota').text(data.stats.anggota.toLocaleString('id-ID'));
+
+            // Golongan Render
+            const g = data.golongan;
+            $('#siaga-pa').text(g.siaga.pa.toLocaleString('id-ID'));
+            $('#siaga-pi').text(g.siaga.pi.toLocaleString('id-ID'));
+            $('#siaga-mula').text(g.siaga.mula.toLocaleString('id-ID'));
+            $('#siaga-bantu').text(g.siaga.bantu.toLocaleString('id-ID'));
+            $('#siaga-tata').text(g.siaga.tata.toLocaleString('id-ID'));
+
+            $('#penggalang-pa').text(g.penggalang.pa.toLocaleString('id-ID'));
+            $('#penggalang-pi').text(g.penggalang.pi.toLocaleString('id-ID'));
+            $('#penggalang-ramu').text(g.penggalang.ramu.toLocaleString('id-ID'));
+            $('#penggalang-rakit').text(g.penggalang.rakit.toLocaleString('id-ID'));
+            $('#penggalang-terap').text(g.penggalang.terap.toLocaleString('id-ID'));
+
+            $('#penegak-pa').text(g.penegak.pa.toLocaleString('id-ID'));
+            $('#penegak-pi').text(g.penegak.pi.toLocaleString('id-ID'));
+            $('#penegak-bantara').text(g.penegak.bantara.toLocaleString('id-ID'));
+            $('#penegak-laksana').text(g.penegak.laksana.toLocaleString('id-ID'));
+
+            $('#pandega-pa').text(g.pandega.pa.toLocaleString('id-ID'));
+            $('#pandega-pi').text(g.pandega.pi.toLocaleString('id-ID'));
+            $('#pandega-pandega').text(g.pandega.pandega.toLocaleString('id-ID'));
+
+            // Garuda
+            $('#garuda-siaga').text(g.garuda.siaga.toLocaleString('id-ID'));
+            $('#garuda-penggalang').text(g.garuda.penggalang.toLocaleString('id-ID'));
+            $('#garuda-penegak').text(g.garuda.penegak.toLocaleString('id-ID'));
+            $('#garuda-pandega').text(g.garuda.pandega.toLocaleString('id-ID'));
+
+            // Agenda Table
+            $('#tbl-agenda').DataTable({
+                data: data.agenda,
+                columns: [
+                    { data: null, render: (d, t, r, meta) => meta.row + 1 },
+                    { data: 'title' },
+                    { data: 'date' },
+                    { data: 'instansi' },
+                    { data: 'detail' }
+                ],
+                language: { search: "Cari Agenda:", lengthMenu: "Tampilkan _MENU_ data" }
+            });
+
+            // Render Charts
+            const labelsKwarcab = data.kwarcabList.map(k => k.nama);
+            const valMuda = data.kwarcabList.map(k => k.muda);
+            const valDewasa = data.kwarcabList.map(k => k.dewasa);
+
+            new Chart(document.getElementById('chartAnggotaMuda').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labelsKwarcab,
+                    datasets: [{ label: 'Anggota Muda', data: valMuda, backgroundColor: 'rgba(40, 167, 69, 0.7)' }]
+                },
+                options: { responsive: true, indexAxis: 'y' }
+            });
+
+            new Chart(document.getElementById('chartAnggotaDewasa').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labelsKwarcab,
+                    datasets: [{ label: 'Anggota Dewasa', data: valDewasa, backgroundColor: 'rgba(0, 123, 255, 0.7)' }]
+                },
+                options: { responsive: true, indexAxis: 'y' }
+            });
+        });
+    </script>
+</body>
+</html>
