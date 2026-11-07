@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SISKA KWARDA LAMPUNG</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f8f9fa; }
+        .bg-pramuka { background-color: #4a2c11 !important; }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-pramuka shadow-sm">
+        <div class="container">
+            <a class="navbar-navbar-brand text-white font-weight-bold" href="#">
+                <i class="fa fa-cogs text-warning mr-2"></i>PANEL ADMIN SISKA LAMPUNG
+            </a>
+            <div class="ml-auto">
+                <a href="index.html" class="btn btn-outline-light btn-sm"><i class="fa fa-eye mr-1"></i> Lihat Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <!-- Action Toolbar -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="font-weight-bold mb-0">Kelola Data Statistik Kwarda Lampung</h4>
+            <div>
+                <button onclick="saveAllData()" class="btn btn-success shadow-sm"><i class="fa fa-save mr-1"></i> Simpan Perubahan</button>
+                <button onclick="resetToDefault()" class="btn btn-danger shadow-sm ml-2"><i class="fa fa-refresh mr-1"></i> Reset Data</button>
+            </div>
+        </div>
+
+        <!-- 1. Statistik Utama -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white font-weight-bold">1. Stat Rekapitulasi Utama</div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="small font-weight-bold">Jumlah Kwarcab</label>
+                        <input type="number" id="adm-kwarcab" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small font-weight-bold">Jumlah Kwarran</label>
+                        <input type="number" id="adm-kwarran" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small font-weight-bold">Jumlah Gudep</label>
+                        <input type="number" id="adm-gudep" class="form-control">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="small font-weight-bold">Total Anggota</label>
+                        <input type="number" id="adm-anggota" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Data Anggota per Kwarcab -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white font-weight-bold">2. Data Anggota Muda & Dewasa per Kwarcab</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Nama Kwarcab</th>
+                                <th>Anggota Muda</th>
+                                <th>Anggota Dewasa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbl-kwarcab-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Kelola Agenda Kegiatan -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white font-weight-bold d-flex justify-content-between align-items-center">
+                <span>3. Kelola Agenda Kegiatan</span>
+                <button class="btn btn-primary btn-sm" onclick="addAgendaRow()"><i class="fa fa-plus"></i> Tambah Agenda</button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="tbl-agenda-edit">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Judul Kegiatan</th>
+                                <th>Waktu / Tanggal</th>
+                                <th>Penyelenggara</th>
+                                <th>Detail / Lokasi</th>
+                                <th width="80px">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbl-agenda-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        const defaultData = {
+            stats: { kwarcab: 15, kwarran: 228, gudep: 3450, anggota: 312500 },
+            kwarcabList: [
+                { nama: "Bandar Lampung", muda: 24500, dewasa: 1200 },
+                { nama: "Metro", muda: 18200, dewasa: 950 },
+                { nama: "Lampung Selatan", muda: 22100, dewasa: 1100 },
+                { nama: "Lampung Tengah", muda: 28400, dewasa: 1350 },
+                { nama: "Lampung Utara", muda: 19500, dewasa: 980 },
+                { nama: "Lampung Barat", muda: 14200, dewasa: 750 },
+                { nama: "Lampung Timur", muda: 26800, dewasa: 1280 },
+                { nama: "Tanggamus", muda: 17900, dewasa: 890 },
+                { nama: "Way Kanan", muda: 16500, dewasa: 820 },
+                { nama: "Pesawaran", muda: 18100, dewasa: 910 },
+                { nama: "Pringsewu", muda: 17300, dewasa: 880 },
+                { nama: "Mesuji", muda: 12400, dewasa: 640 },
+                { nama: "Tulang Bawang", muda: 15800, dewasa: 790 },
+                { nama: "Tulang Bawang Barat", muda: 13900, dewasa: 690 },
+                { nama: "Pesisir Barat", muda: 11200, dewasa: 580 }
+            ],
+            golongan: {
+                siaga: { pa: 45000, pi: 48000, mula: 35000, bantu: 26000, tata: 20000 },
+                penggalang: { pa: 52000, pi: 55000, ramu: 40000, rakit: 32000, terap: 20000 },
+                penegak: { pa: 38000, pi: 41000, bantara: 44000, laksana: 25000 },
+                pandega: { pa: 12000, pi: 14000, pandega: 22000 },
+                garuda: { siaga: 450, penggalang: 680, penegak: 520, pandega: 190 }
+            },
+            agenda: [
+                { id: 1, title: "Rapat Kerja Daerah (Rakerda) Kwarda Lampung", date: "15 November 2026", instansi: "Kwarda Lampung", detail: "Gedung Pramuka Rajabasa" },
+                { id: 2, title: "Kursus Pembina Pramuka Mahir Dasar (KMD)", date: "20-25 November 2026", instansi: "Kwarcab Bandar Lampung", detail: "Pusdiklatcab" },
+                { id: 3, title: "Perkemahan Wirakarya Daerah Lampung", date: "10-15 Desember 2026", instansi: "DKD Lampung", detail: "Kota Metro" }
+            ]
+        };
+
+        let currentData = {};
+
+        function loadAdminData() {
+            const saved = localStorage.getItem('SISKA_LAMPUNG_DATA');
+            currentData = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultData));
+
+            $('#adm-kwarcab').val(currentData.stats.kwarcab);
+            $('#adm-kwarran').val(currentData.stats.kwarran);
+            $('#adm-gudep').val(currentData.stats.gudep);
+            $('#adm-anggota').val(currentData.stats.anggota);
+
+            // Populate Kwarcab
+            let kwBody = '';
+            currentData.kwarcabList.forEach((k, idx) => {
+                kwBody += `<tr>
+                    <td><strong>${k.nama}</strong></td>
+                    <td><input type="number" class="form-control form-control-sm input-muda" data-idx="${idx}" value="${k.muda}"></td>
+                    <td><input type="number" class="form-control form-control-sm input-dewasa" data-idx="${idx}" value="${k.dewasa}"></td>
+                </tr>`;
+            });
+            $('#tbl-kwarcab-body').html(kwBody);
+
+            // Populate Agenda
+            renderAgendaTable();
+        }
+
+        function renderAgendaTable() {
+            let agBody = '';
+            currentData.agenda.forEach((a, idx) => {
+                agBody += `<tr>
+                    <td><input type="text" class="form-control form-control-sm ag-title" value="${a.title}"></td>
+                    <td><input type="text" class="form-control form-control-sm ag-date" value="${a.date}"></td>
+                    <td><input type="text" class="form-control form-control-sm ag-instansi" value="${a.instansi}"></td>
+                    <td><input type="text" class="form-control form-control-sm ag-detail" value="${a.detail}"></td>
+                    <td class="text-center"><button class="btn btn-danger btn-sm" onclick="removeAgendaRow(this)"><i class="fa fa-trash"></i></button></td>
+                </tr>`;
+            });
+            $('#tbl-agenda-body').html(agBody);
+        }
+
+        function addAgendaRow() {
+            $('#tbl-agenda-body').append(`<tr>
+                <td><input type="text" class="form-control form-control-sm ag-title" placeholder="Nama Kegiatan"></td>
+                <td><input type="text" class="form-control form-control-sm ag-date" placeholder="Tanggal"></td>
+                <td><input type="text" class="form-control form-control-sm ag-instansi" placeholder="Penyelenggara"></td>
+                <td><input type="text" class="form-control form-control-sm ag-detail" placeholder="Lokasi"></td>
+                <td class="text-center"><button class="btn btn-danger btn-sm" onclick="removeAgendaRow(this)"><i class="fa fa-trash"></i></button></td>
+            </tr>`);
+        }
+
+        function removeAgendaRow(btn) {
+            $(btn).closest('tr').remove();
+        }
+
+        function saveAllData() {
+            currentData.stats.kwarcab = parseInt($('#adm-kwarcab').val()) || 0;
+            currentData.stats.kwarran = parseInt($('#adm-kwarran').val()) || 0;
+            currentData.stats.gudep = parseInt($('#adm-gudep').val()) || 0;
+            currentData.stats.anggota = parseInt($('#adm-anggota').val()) || 0;
+
+            // Save Kwarcab inputs
+            $('.input-muda').each(function() {
+                const idx = $(this).data('idx');
+                currentData.kwarcabList[idx].muda = parseInt($(this).val()) || 0;
+            });
+            $('.input-dewasa').each(function() {
+                const idx = $(this).data('idx');
+                currentData.kwarcabList[idx].dewasa = parseInt($(this).val()) || 0;
+            });
+
+            // Save Agenda inputs
+            const newAgenda = [];
+            $('#tbl-agenda-body tr').each(function(i) {
+                const title = $(this).find('.ag-title').val();
+                const date = $(this).find('.ag-date').val();
+                const instansi = $(this).find('.ag-instansi').val();
+                const detail = $(this).find('.ag-detail').val();
+
+                if (title && date) {
+                    newAgenda.push({ id: i + 1, title, date, instansi, detail });
+                }
+            });
+            currentData.agenda = newAgenda;
+
+            localStorage.setItem('SISKA_LAMPUNG_DATA', JSON.stringify(currentData));
+            Swal.fire({ icon: 'success', title: 'Berhasil', text: 'Data SISKA Lampung telah diperbarui!' });
+        }
+
+        function resetToDefault() {
+            Swal.fire({
+                title: 'Kembalikan ke data awal?',
+                text: "Semua perubahan data Anda akan dikembalikan ke default Kwarda Lampung.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Reset!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.removeItem('SISKA_LAMPUNG_DATA');
+                    loadAdminData();
+                    Swal.fire('Terhapus!', 'Data berhasil di-reset.', 'success');
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            loadAdminData();
+        });
+    </script>
+</body>
+</html>
